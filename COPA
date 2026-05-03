@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Figurinhas Copa 2026</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚽ Figurinhas Copa 2026</h1>
+
+  <h3>Cadastrar anúncio</h3>
+
+  <input type="text" id="nome" placeholder="Seu nome">
+  <input type="text" id="cidade" placeholder="Sua cidade">
+
+  <select id="tipo">
+    <option value="troca">Troca</option>
+    <option value="venda">Venda</option>
+  </select>
+
+  <textarea id="tem" placeholder="Figurinhas (ex: 10, 25, 88)"></textarea>
+  <textarea id="quer" placeholder="O que quer (ou preço se for venda)"></textarea>
+
+  <button onclick="cadastrar()">Publicar</button>
+
+  <h3>Anúncios</h3>
+  <div id="lista"></div>
+</div>
+
+<script>
+  let anuncios = JSON.parse(localStorage.getItem("anuncios")) || [];
+
+  function cadastrar() {
+    const nome = document.getElementById("nome").value;
+    const cidade = document.getElementById("cidade").value;
+    const tipo = document.getElementById("tipo").value;
+    const tem = document.getElementById("tem").value;
+    const quer = document.getElementById("quer").value;
+
+    if (!nome || !cidade || !tem) {
+      alert("Preencha os campos obrigatórios!");
+      return;
+    }
+
+    anuncios.push({ nome, cidade, tipo, tem, quer });
+
+    localStorage.setItem("anuncios", JSON.stringify(anuncios));
+    mostrar();
+
+    document.getElementById("nome").value = "";
+    document.getElementById("cidade").value = "";
+    document.getElementById("tem").value = "";
+    document.getElementById("quer").value = "";
+  }
+
+  function mostrar() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    anuncios.forEach(a => {
+      lista.innerHTML += `
+        <div class="card">
+          <strong>${a.nome}</strong> - ${a.cidade}<br>
+          <b>Tipo:</b> ${a.tipo}<br>
+          <b>Figurinhas:</b> ${a.tem}<br>
+          <b>${a.tipo === 'venda' ? 'Preço' : 'Quer'}:</b> ${a.quer}
+        </div>
+      `;
+    });
+  }
+
+  mostrar();
+</script>
+
+</body>
+</html>
